@@ -54,15 +54,33 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helve
 
 .list-content { padding: 20px; }
 
-/* Card */
-.card { background: var(--paper); padding: 20px; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 14px; position: relative; transition: var(--transition); }
-.card .t { font-size: 17px; font-weight: 600; margin-bottom: 8px; padding-right: 60px; }
-.card .c { font-size: 14px; color: var(--ink2); line-height: 1.6; white-space: pre-wrap; }
+/* Card - 移除删除按钮，添加点击效果 */
+.card { background: var(--paper); padding: 20px; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 14px; position: relative; transition: var(--transition); cursor: pointer; }
+.card:active { transform: scale(0.98); }
+.card .t { font-size: 17px; font-weight: 600; margin-bottom: 8px; padding-right: 0; } /* 移除右侧padding */
+.card .c { font-size: 14px; color: var(--ink2); line-height: 1.6; white-space: pre-wrap; overflow: hidden; }
 .card .meta { font-size: 12px; color: var(--ink2); margin-top: 12px; display: flex; justify-content: space-between; align-items: center; }
-.card .actions { position: absolute; bottom: 20px; right: 20px; }
-.card .actions button { background: none; border: none; color: var(--danger); font-size: 13px; cursor: pointer; padding: 4px 8px; }
 .card .tags { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
 .card .tag { background: var(--bg); color: var(--ink2); padding: 4px 10px; border-radius: 20px; font-size: 12px; border: 1px solid var(--line); }
+
+/* Detail View - 新增 */
+.detail-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 20px 10px; background: var(--paper); position: sticky; top: 0; z-index: 10; border-bottom: 1px solid var(--line); transition: var(--transition); }
+.detail-header h2 { font-size: 20px; font-weight: 600; }
+.detail-header .back-btn { font-size: 16px; color: var(--primary); background: none; border: none; padding: 8px; }
+.detail-header .action-btns { display: flex; gap: 12px; }
+.detail-header .edit-btn { font-size: 16px; color: var(--primary); background: none; border: none; padding: 8px; }
+.detail-header .delete-btn { font-size: 16px; color: var(--danger); background: none; border: none; padding: 8px; }
+
+.detail-content { padding: 24px 20px 100px; }
+.detail-section { background: var(--paper); padding: 20px; border-radius: var(--radius); margin-bottom: 16px; box-shadow: var(--shadow); transition: var(--transition); }
+.detail-section h3 { font-size: 14px; color: var(--ink2); margin-bottom: 12px; font-weight: 500; }
+.detail-section .content { font-size: 16px; line-height: 1.7; white-space: pre-wrap; }
+.detail-section .points-list { display: flex; flex-direction: column; gap: 16px; }
+.detail-section .point-item { padding: 16px; background: var(--bg); border-radius: 12px; border-left: 4px solid var(--primary); }
+.detail-section .point-number { font-size: 12px; color: var(--primary); font-weight: 600; margin-bottom: 8px; }
+.detail-section .point-content { font-size: 15px; line-height: 1.6; }
+.detail-section .meta-info { font-size: 13px; color: var(--ink2); display: flex; flex-wrap: wrap; gap: 12px; }
+.detail-section .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
 
 /* Form View */
 .form-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 20px 10px; background: var(--paper); position: sticky; top: 0; z-index: 10; border-bottom: 1px solid var(--line); transition: var(--transition); }
@@ -149,11 +167,24 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helve
     <button class="fab" id="fabAdd">＋</button>
   </div>
 
+  <!-- Detail View - 新增 -->
+  <div class="view hidden" id="detailView">
+    <div class="detail-header">
+      <button class="back-btn" id="backToList">‹ 返回</button>
+      <h2 id="detailTitle">详情</h2>
+      <div class="action-btns">
+        <button class="edit-btn" id="editDetail">编辑</button>
+        <button class="delete-btn" id="deleteDetail">删除</button>
+      </div>
+    </div>
+    <div class="detail-content" id="detailContent"></div>
+  </div>
+
   <!-- Form View -->
   <div class="view hidden" id="formView">
     <div class="form-header">
       <button class="close-btn" id="closeForm">取消</button>
-      <h2>新记录</h2>
+      <h2 id="formTitle">新记录</h2>
       <div style="width: 40px;"></div>
     </div>
     <div class="form-content">
@@ -228,9 +259,16 @@ let currentCategory = 'sentence';
 let allItems = [];
 let darkMode = false;
 let currentFilterType = 'all'; // 'all' or a category key
+let currentItemId = null; // 当前查看/编辑的项目ID
 
 // --- DOM ---
-const views = { list: document.getElementById('listView'), form: document.getElementById('formView'), stats: document.getElementById('statsView'), more: document.getElementById('moreView') };
+const views = { 
+  list: document.getElementById('listView'), 
+  detail: document.getElementById('detailView'),
+  form: document.getElementById('formView'), 
+  stats: document.getElementById('statsView'), 
+  more: document.getElementById('moreView') 
+};
 const listEl = document.getElementById('list');
 const catGrid = document.getElementById('categoryGrid');
 const dynamicFields = document.getElementById('dynamicFields');
@@ -239,6 +277,12 @@ const themeToggle = document.getElementById('themeToggle');
 const statsContainer = document.getElementById('statsContainer');
 const filterBar = document.getElementById('filterBar');
 const tagsInput = document.getElementById('tagsInput');
+const detailContent = document.getElementById('detailContent');
+const detailTitle = document.getElementById('detailTitle');
+const backToList = document.getElementById('backToList');
+const editDetail = document.getElementById('editDetail');
+const deleteDetail = document.getElementById('deleteDetail');
+const formTitle = document.getElementById('formTitle');
 
 // --- Init ---
 window.addEventListener('DOMContentLoaded', async () => {
@@ -267,6 +311,9 @@ function setupEventListeners() {
   document.getElementById('clearAllBtn').onclick = clearAllData;
   themeToggle.onclick = toggleTheme;
   document.getElementById('saveBtn').onclick = handleSave;
+  backToList.onclick = hideDetail;
+  editDetail.onclick = editCurrentItem;
+  deleteDetail.onclick = deleteCurrentItem;
 
   searchInput.oninput = () => renderList();
 
@@ -366,13 +413,14 @@ async function handleSave() {
   const tags = tagsInput.value.split(',').map(t => t.trim()).filter(Boolean);
   data.tags = tags;
 
-  const record = { id: Date.now().toString(), type: currentCategory, ...data, createdAt: Date.now() };
+  const record = { id: currentItemId || Date.now().toString(), type: currentCategory, ...data, createdAt: Date.now() };
   
   // 修复点：确保保存操作完成后再刷新列表
   try {
     await saveItem(record);
     hideForm();
     await refreshList();
+    currentItemId = null;
   } catch (error) {
     console.error('保存失败:', error);
     alert('保存失败，请重试');
@@ -392,6 +440,27 @@ async function refreshList() {
   renderStats();
 }
 
+// --- 内容截断函数 ---
+function truncateText(text, maxLength = 100) {
+  if (!text) return '';
+  if (text.length <= maxLength) return text;
+  return text.substring(0, maxLength) + '...';
+}
+
+function getFirstLine(text) {
+  if (!text) return '';
+  const lines = text.split('\n');
+  return lines[0] || '';
+}
+
+function truncateDefinition(text, maxSentences = 2) {
+  if (!text) return '';
+  const sentences = text.split(/[。！？!?]/);
+  if (sentences.length <= maxSentences) return text;
+  return sentences.slice(0, maxSentences).join('。') + '。';
+}
+
+// --- 列表渲染（摘要模式）---
 async function renderList() {
   const query = searchInput.value.toLowerCase().trim();
   let items = allItems;
@@ -422,17 +491,40 @@ async function renderList() {
     return;
   }
   
-  listEl.innerHTML = items.map(item => `
-    <div class="card">
-      <div class="t">${item.title || item.topic || item.content?.substring(0, 30)}</div>
-      <div class="c">${item.content || (item.points ? item.points.length + ' 个论点' : '')}</div>
-      ${item.tags && item.tags.length ? `<div class="tags">${item.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</div>` : ''}
-      <div class="meta">
-        <span>${CATEGORIES.find(c => c.key === item.type)?.icon} ${CATEGORIES.find(c => c.key === item.type)?.name} · ${timeAgo(item.createdAt)}</span>
-        <div class="actions"><button onclick="deleteItem('${item.id}')">删除</button></div>
+  listEl.innerHTML = items.map(item => {
+    let summary = '';
+    let title = '';
+    
+    switch(item.type) {
+      case 'discussion':
+        title = item.topic || '未命名讨论';
+        summary = `${item.points ? item.points.length : 0}个论点`;
+        break;
+      case 'word':
+        title = item.title || '未命名词语';
+        summary = truncateDefinition(item.content || '', 2);
+        break;
+      case 'sentence':
+        title = '句子';
+        summary = truncateText(item.content || '', 80);
+        break;
+      case 'essay':
+        title = '随笔';
+        summary = getFirstLine(item.content || '');
+        break;
+    }
+    
+    return `
+      <div class="card" onclick="showDetail('${item.id}')">
+        <div class="t">${title}</div>
+        <div class="c">${summary}</div>
+        ${item.tags && item.tags.length ? `<div class="tags">${item.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</div>` : ''}
+        <div class="meta">
+          <span>${CATEGORIES.find(c => c.key === item.type)?.icon} ${CATEGORIES.find(c => c.key === item.type)?.name} · ${timeAgo(item.createdAt)}</span>
+        </div>
       </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
 function updateFilterBar() {
@@ -454,6 +546,168 @@ function updateFilterBar() {
 function clearFilter() {
   currentFilterType = 'all';
   renderList();
+}
+
+// --- 详情页功能 ---
+function showDetail(id) {
+  currentItemId = id;
+  const item = allItems.find(i => i.id === id);
+  if (!item) return;
+  
+  // 设置详情页标题
+  detailTitle.textContent = CATEGORIES.find(c => c.key === item.type)?.name || '详情';
+  
+  // 渲染详情内容
+  let html = '';
+  
+  switch(item.type) {
+    case 'discussion':
+      html = `
+        <div class="detail-section">
+          <h3>讨论主题</h3>
+          <div class="content">${item.topic || ''}</div>
+        </div>
+        <div class="detail-section">
+          <h3>论点 (${item.points ? item.points.length : 0})</h3>
+          <div class="points-list">
+            ${item.points ? item.points.map((point, index) => `
+              <div class="point-item">
+                <div class="point-number">论点 ${index + 1}</div>
+                <div class="point-content">${point}</div>
+              </div>
+            `).join('') : '<div class="content">暂无论点</div>'}
+          </div>
+        </div>
+      `;
+      break;
+      
+    case 'word':
+      html = `
+        <div class="detail-section">
+          <h3>词语</h3>
+          <div class="content">${item.title || ''}</div>
+        </div>
+        <div class="detail-section">
+          <h3>释义</h3>
+          <div class="content">${item.content || ''}</div>
+        </div>
+      `;
+      break;
+      
+    case 'sentence':
+      html = `
+        <div class="detail-section">
+          <h3>句子</h3>
+          <div class="content">${item.content || ''}</div>
+        </div>
+        ${item.author ? `<div class="detail-section">
+          <h3>作者</h3>
+          <div class="content">${item.author}</div>
+        </div>` : ''}
+        ${item.source ? `<div class="detail-section">
+          <h3>来源</h3>
+          <div class="content">${item.source}</div>
+        </div>` : ''}
+      `;
+      break;
+      
+    case 'essay':
+      html = `
+        <div class="detail-section">
+          <h3>随笔</h3>
+          <div class="content">${item.content || ''}</div>
+        </div>
+        ${item.author ? `<div class="detail-section">
+          <h3>作者</h3>
+          <div class="content">${item.author}</div>
+        </div>` : ''}
+      `;
+      break;
+  }
+  
+  // 添加元信息和标签
+  html += `
+    <div class="detail-section">
+      <h3>信息</h3>
+      <div class="meta-info">
+        <span>📅 ${new Date(item.createdAt).toLocaleDateString()}</span>
+        <span>${CATEGORIES.find(c => c.key === item.type)?.icon} ${CATEGORIES.find(c => c.key === item.type)?.name}</span>
+      </div>
+      ${item.tags && item.tags.length ? `<div class="tags">${item.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</div>` : ''}
+    </div>
+  `;
+  
+  detailContent.innerHTML = html;
+  
+  // 切换到详情页
+  Object.values(views).forEach(v => v.classList.add('hidden'));
+  views.detail.classList.remove('hidden');
+}
+
+function hideDetail() {
+  Object.values(views).forEach(v => v.classList.add('hidden'));
+  views.list.classList.remove('hidden');
+  currentItemId = null;
+}
+
+function editCurrentItem() {
+  const item = allItems.find(i => i.id === currentItemId);
+  if (!item) return;
+  
+  currentCategory = item.type;
+  currentItemId = item.id;
+  
+  // 切换到表单页
+  Object.values(views).forEach(v => v.classList.add('hidden'));
+  views.form.classList.remove('hidden');
+  
+  // 更新表单标题
+  formTitle.textContent = '编辑记录';
+  
+  // 渲染分类选择器并选中当前分类
+  renderCategories();
+  document.querySelectorAll('.cat-btn').forEach(btn => {
+    btn.classList.toggle('selected', btn.dataset.key === currentCategory);
+  });
+  
+  // 渲染动态字段
+  renderDynamicFields();
+  
+  // 填充表单数据
+  setTimeout(() => {
+    const config = FIELD_CONFIGS[currentCategory];
+    config.forEach(field => {
+      if (field.type !== 'dynamic') {
+        const el = document.getElementById(`${field.id}Input`);
+        if (el && item[field.id]) {
+          el.value = item[field.id];
+        }
+      }
+    });
+    
+    // 处理讨论的论点
+    if (currentCategory === 'discussion' && item.points) {
+      const container = document.getElementById('pointsInputs');
+      container.innerHTML = '';
+      item.points.forEach((point, index) => {
+        const div = document.createElement('div');
+        div.className = 'dynamic-input-item';
+        div.innerHTML = `<textarea id="pointsInput${index + 1}" placeholder="论点 ${index + 1}">${point}</textarea><button type="button" class="remove-btn" onclick="this.parentElement.remove()">×</button>`;
+        container.appendChild(div);
+      });
+    }
+    
+    // 填充标签
+    if (item.tags && item.tags.length) {
+      tagsInput.value = item.tags.join(', ');
+    }
+  }, 100);
+}
+
+async function deleteCurrentItem() {
+  if (!confirm('确定要删除这条记录吗？')) return;
+  await deleteItem(currentItemId);
+  hideDetail();
 }
 
 // --- Stats View ---
@@ -601,6 +855,8 @@ function getAllItems() {
 
 // --- View Switch ---
 function showForm() { 
+  currentItemId = null;
+  formTitle.textContent = '新记录';
   views.list.classList.add('hidden'); 
   views.form.classList.remove('hidden'); 
   renderDynamicFields(); 
