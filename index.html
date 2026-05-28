@@ -12,193 +12,118 @@
   --ink2: #86868b;
   --line: #e5e5e7;
   --primary: #007aff;
+  --danger: #ff3b30;
   --radius: 16px;
   --shadow: 0 4px 20px rgba(0,0,0,0.04);
+  --transition: all 0.3s ease;
+}
+
+/* Dark Mode Variables */
+body.dark-mode {
+  --bg: #1c1c1e;
+  --paper: #2c2c2e;
+  --ink: #f2f2f7;
+  --ink2: #8e8e93;
+  --line: #48484a;
+  --shadow: 0 4px 20px rgba(0,0,0,0.2);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background-color: var(--bg);
-  color: var(--ink);
-  min-height: 100vh;
-  overflow: hidden; /* 防止双滚动条 */
-}
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--ink); height: 100vh; overflow: hidden; transition: var(--transition); }
 
-/* App Container */
-.app { height: 100vh; width: 100%; position: relative; overflow: hidden; }
-
-/* Views */
-.view {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: var(--bg);
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-}
+.app { height: 100vh; position: relative; overflow: hidden; }
+.view { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg); transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 .view.hidden { transform: translateX(100%); opacity: 0; pointer-events: none; }
 
 /* List View */
-.list-header {
-  background: var(--paper);
-  padding: 20px 20px 10px;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.02);
-}
-.list-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
-.list-header p { color: var(--ink2); font-size: 14px; }
+.list-header { background: var(--paper); padding: 20px 20px 10px; position: sticky; top: 0; z-index: 10; box-shadow: 0 2px 10px rgba(0,0,0,0.02); transition: var(--transition); }
+.header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.list-header h1 { font-size: 28px; font-weight: 700; }
+.theme-toggle { background: none; border: 1px solid var(--line); color: var(--ink); width: 44px; height: 44px; border-radius: 50%; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: var(--transition); }
+
+.search-bar { display: flex; align-items: center; background: var(--bg); border-radius: 12px; padding: 12px 16px; margin-bottom: 10px; border: 1px solid var(--line); transition: var(--transition); }
+.search-bar:focus-within { border-color: var(--primary); }
+.search-bar svg { width: 20px; height: 20px; margin-right: 10px; fill: var(--ink2); }
+.search-bar input { flex: 1; border: none; background: transparent; font-size: 16px; color: var(--ink); outline: none; }
+.search-bar input::placeholder { color: var(--ink2); }
+
+/* Filter Bar */
+.filter-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; padding: 8px 0; }
+.filter-bar .filter-tag { background: var(--primary); color: white; padding: 6px 12px; border-radius: 20px; font-size: 13px; display: flex; align-items: center; gap: 6px; }
+.filter-bar .filter-tag button { background: none; border: none; color: white; font-size: 16px; cursor: pointer; padding: 0; line-height: 1; }
+
 .list-content { padding: 20px; }
 
 /* Card */
-.card {
-  background: var(--paper);
-  padding: 20px;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  margin-bottom: 14px;
-}
-.card .t { font-size: 17px; font-weight: 600; margin-bottom: 8px; line-height: 1.4; }
+.card { background: var(--paper); padding: 20px; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 14px; position: relative; transition: var(--transition); }
+.card .t { font-size: 17px; font-weight: 600; margin-bottom: 8px; padding-right: 60px; }
 .card .c { font-size: 14px; color: var(--ink2); line-height: 1.6; white-space: pre-wrap; }
-.card .meta { font-size: 12px; color: #c7c7cc; margin-top: 12px; }
+.card .meta { font-size: 12px; color: var(--ink2); margin-top: 12px; display: flex; justify-content: space-between; align-items: center; }
+.card .actions { position: absolute; bottom: 20px; right: 20px; }
+.card .actions button { background: none; border: none; color: var(--danger); font-size: 13px; cursor: pointer; padding: 4px 8px; }
+.card .tags { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
+.card .tag { background: var(--bg); color: var(--ink2); padding: 4px 10px; border-radius: 20px; font-size: 12px; border: 1px solid var(--line); }
 
 /* Form View */
-.form-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 20px 10px;
-  background: var(--paper);
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  border-bottom: 1px solid var(--line);
-}
+.form-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 20px 10px; background: var(--paper); position: sticky; top: 0; z-index: 10; border-bottom: 1px solid var(--line); transition: var(--transition); }
 .form-header h2 { font-size: 20px; font-weight: 600; }
 .form-header .close-btn { font-size: 16px; color: var(--primary); background: none; border: none; padding: 8px; }
 
 .form-content { padding: 24px 20px 100px; }
 .field { margin-bottom: 24px; }
-.field label {
-  display: block;
-  font-size: 13px;
-  color: var(--ink2);
-  margin-bottom: 10px;
-  font-weight: 500;
-}
-.field input, .field textarea, .field select {
-  width: 100%;
-  padding: 16px;
-  border-radius: 12px;
-  border: 1px solid var(--line);
-  background: var(--paper);
-  font-family: inherit;
-  font-size: 16px;
-  transition: border 0.2s;
-}
-.field input:focus, .field textarea:focus, .field select:focus {
-  outline: none;
-  border-color: var(--primary);
-}
-.field textarea { min-height: 160px; resize: none; }
+.field label { display: block; font-size: 13px; color: var(--ink2); margin-bottom: 10px; font-weight: 500; }
+.field input, .field textarea, .field select { width: 100%; padding: 16px; border-radius: 12px; border: 1px solid var(--line); background: var(--paper); font-family: inherit; font-size: 16px; transition: border 0.2s; }
+.field input:focus, .field textarea:focus { outline: none; border-color: var(--primary); }
+.field textarea { min-height: 120px; resize: none; }
 .field .optional { color: var(--ink2); font-size: 12px; margin-left: 4px; }
 
 /* Category Selector */
 .category-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-.cat-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 24px 12px;
-  border-radius: var(--radius);
-  border: 1px solid var(--line);
-  background: var(--paper);
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.cat-btn:hover, .cat-btn.selected { border-color: var(--primary); background: #f0f7ff; }
+.cat-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px 12px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--paper); cursor: pointer; transition: all 0.2s; }
+.cat-btn.selected { border-color: var(--primary); background: #f0f7ff; }
 .cat-btn .icon { font-size: 32px; margin-bottom: 8px; }
 .cat-btn .name { font-size: 14px; font-weight: 600; }
 
-/* Save Button */
-.save-btn {
-  position: fixed;
-  bottom: 80px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% - 40px);
-  max-width: 460px;
-  padding: 16px;
-  border-radius: 16px;
-  background: var(--ink);
-  color: #fff;
-  font-weight: 600;
-  font-size: 17px;
-  border: none;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-  z-index: 20;
-}
+/* Dynamic Points (Discussion) */
+.dynamic-field .add-dynamic-btn { margin-top: 12px; padding: 10px 16px; background: var(--bg); border: 1px dashed var(--line); border-radius: 10px; color: var(--primary); font-weight: 600; width: 100%; }
+.dynamic-inputs { display: flex; flex-direction: column; gap: 12px; }
+.dynamic-input-item { display: flex; gap: 8px; align-items: flex-start; }
+.dynamic-input-item textarea { flex: 1; min-height: 80px; }
+.dynamic-input-item .remove-btn { background: #ff3b30; color: white; border: none; border-radius: 8px; width: 36px; height: 36px; font-size: 20px; cursor: pointer; flex-shrink: 0; margin-top: 8px; }
 
-/* FAB */
-.fab {
-  position: fixed;
-  bottom: 80px;
-  right: 20px;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: var(--ink);
-  color: #fff;
-  font-size: 26px;
-  border: none;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-  cursor: pointer;
-  z-index: 15;
-}
+/* Stats View (Category Tab) */
+.stats-container { padding: 20px; }
+.stat-card { background: var(--paper); padding: 24px; border-radius: var(--radius); margin-bottom: 16px; box-shadow: var(--shadow); transition: var(--transition); }
+.stat-card.total { text-align: center; }
+.stat-card.total .number { font-size: 48px; font-weight: 700; color: var(--primary); }
+.stat-card.total .label { font-size: 16px; color: var(--ink2); margin-top: 8px; }
+.stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.mini-stat { background: var(--paper); padding: 16px; border-radius: var(--radius); text-align: center; border: 1px solid var(--line); transition: var(--transition); cursor: pointer; }
+.mini-stat:hover { transform: scale(1.02); }
+.mini-stat .icon { font-size: 28px; margin-bottom: 8px; }
+.mini-stat .count { font-size: 22px; font-weight: 700; }
+.mini-stat .name { font-size: 12px; color: var(--ink2); margin-top: 4px; }
+.progress-bar { height: 6px; background: var(--bg); border-radius: 3px; margin-top: 10px; overflow: hidden; }
+.progress-bar .fill { height: 100%; background: var(--primary); border-radius: 3px; transition: width 0.5s; }
 
-/* Bottom Nav */
-.nav-bar {
-  position: fixed;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 500px;
-  height: 56px;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  background: var(--paper);
-  border-top: 1px solid var(--line);
-  z-index: 30;
-  padding-bottom: env(safe-area-inset-bottom);
-}
-.nav-btn {
-  font-size: 12px;
-  opacity: .5;
-  background: none;
-  border: none;
-  color: inherit;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  cursor: pointer;
-  padding: 4px 8px;
-}
+/* More View */
+.more-content { padding: 20px; }
+.more-btn { display: block; width: 100%; padding: 16px; margin-bottom: 12px; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); text-align: left; font-size: 16px; cursor: pointer; transition: var(--transition); }
+.more-btn.danger { color: var(--danger); border-color: var(--danger); background: #fff5f5; }
+.more-btn input[type="file"] { display: none; }
+
+/* Buttons */
+.fab { position: fixed; bottom: 80px; right: 20px; width: 56px; height: 56px; border-radius: 50%; background: var(--ink); color: #fff; font-size: 26px; border: none; box-shadow: 0 6px 20px rgba(0,0,0,0.15); cursor: pointer; z-index: 15; transition: var(--transition); }
+.save-btn { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); width: calc(100% - 40px); max-width: 460px; padding: 16px; border-radius: 16px; background: var(--ink); color: #fff; font-weight: 600; font-size: 17px; border: none; box-shadow: 0 6px 20px rgba(0,0,0,0.15); z-index: 20; transition: var(--transition); }
+
+/* Nav */
+.nav-bar { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 500px; height: 56px; display: flex; justify-content: space-around; align-items: center; background: var(--paper); border-top: 1px solid var(--line); z-index: 30; padding-bottom: env(safe-area-inset-bottom); transition: var(--transition); }
+.nav-btn { font-size: 12px; opacity: .5; background: none; border: none; color: inherit; display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; transition: var(--transition); }
 .nav-btn.active { opacity: 1; color: var(--primary); font-weight: 600; }
 .nav-btn .icon { font-size: 20px; }
 
-/* Empty State */
-.empty {
-  padding: 60px 20px;
-  text-align: center;
-  color: var(--ink2);
-  font-size: 15px;
-}
+/* Empty */
+.empty { padding: 60px 20px; text-align: center; color: var(--ink2); }
 .empty .big { font-size: 48px; margin-bottom: 12px; opacity: 0.3; }
 </style>
 </head>
@@ -208,8 +133,17 @@ body {
   <!-- List View -->
   <div class="view" id="listView">
     <div class="list-header">
-      <h1>摘抄本</h1>
-      <p>记录你的思绪与灵感</p>
+      <div class="header-top">
+        <h1>摘抄本</h1>
+        <button class="theme-toggle" id="themeToggle">🌙</button>
+      </div>
+      <div class="search-bar">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21.53 20.47l-3.66-3.66C18.195 15.91 18.345 15.595 18.345 15.595c1.215-1.215 1.965-2.895 1.965-4.745 0-3.86-3.14-7-7-7s-7 3.14-7 7 3.14 7 7 7c1.85 0 3.535-.75 4.745-1.965 0 0 .315.15.595.345l3.66 3.66c.735.735 1.93.735 2.665 0 .735-.735.735-1.93 0-2.665zm-6.53-4.47c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
+        <input type="text" id="searchInput" placeholder="搜索标题、内容、作者或标签...">
+      </div>
+      <div class="filter-bar" id="filterBar" style="display: none;">
+        <!-- 动态显示当前筛选的分类 -->
+      </div>
     </div>
     <div class="list-content" id="list"></div>
     <button class="fab" id="fabAdd">＋</button>
@@ -220,93 +154,104 @@ body {
     <div class="form-header">
       <button class="close-btn" id="closeForm">取消</button>
       <h2>新记录</h2>
-      <div style="width: 40px;"></div> <!-- Spacer -->
+      <div style="width: 40px;"></div>
     </div>
     <div class="form-content">
       <div class="field">
         <label>分类</label>
-        <div class="category-grid" id="categoryGrid">
-          <!-- Categories injected by JS -->
-        </div>
+        <div class="category-grid" id="categoryGrid"></div>
       </div>
+      <div id="dynamicFields"></div>
       <div class="field">
-        <label>标题</label>
-        <input type="text" id="titleInput" placeholder="请输入标题">
-      </div>
-      <div class="field">
-        <label>内容</label>
-        <textarea id="contentInput" placeholder="写下你的内容..."></textarea>
-      </div>
-      <div class="field">
-        <label>作者 <span class="optional">(选填)</span></label>
-        <input type="text" id="authorInput" placeholder="作者姓名">
-      </div>
-      <div class="field">
-        <label>来源 <span class="optional">(选填)</span></label>
-        <input type="text" id="sourceInput" placeholder="书籍、文章或网站">
+        <label>标签 <span class="optional">(选填，用逗号分隔)</span></label>
+        <input type="text" id="tagsInput" placeholder="例如：哲学,人生,感悟">
       </div>
     </div>
     <button class="save-btn" id="saveBtn">保存</button>
   </div>
 
-  <!-- Bottom Nav -->
+  <!-- Stats View (Category Tab) -->
+  <div class="view hidden" id="statsView">
+    <div class="list-header">
+      <h1>数据统计</h1>
+      <p>你的知识沉淀概览</p>
+    </div>
+    <div class="stats-container" id="statsContainer"></div>
+  </div>
+
+  <!-- More View -->
+  <div class="view hidden" id="moreView">
+    <div class="list-header">
+      <h1>更多</h1>
+      <p>数据管理与设置</p>
+    </div>
+    <div class="more-content">
+      <button class="more-btn" id="exportBtn">📤 导出数据</button>
+      <label class="more-btn">
+        📥 导入数据
+        <input type="file" id="importInput" accept=".json">
+      </label>
+      <button class="more-btn danger" id="clearAllBtn">🗑️ 清空所有数据</button>
+    </div>
+  </div>
+
+  <!-- Nav -->
   <nav class="nav-bar">
-    <button class="nav-btn active" data-view="list">
-      <span class="icon">📖</span>
-      <span>摘录</span>
-    </button>
-    <button class="nav-btn" data-view="category">
-      <span class="icon">🗂️</span>
-      <span>分类</span>
-    </button>
-    <button class="nav-btn" data-view="more">
-      <span class="icon">⚙️</span>
-      <span>更多</span>
-    </button>
+    <button class="nav-btn active" data-view="list"><span class="icon">📖</span><span>摘录</span></button>
+    <button class="nav-btn" data-view="stats"><span class="icon">📊</span><span>分类</span></button>
+    <button class="nav-btn" data-view="more"><span class="icon">⚙️</span><span>更多</span></button>
   </nav>
 </div>
 
 <script>
 // --- Config ---
-const DB_NAME = 'zhainote_final';
+const DB_NAME = 'zhainote_smart_v4';
 const STORE_NAME = 'items';
 const CATEGORIES = [
   { key: 'sentence', name: '句子', icon: '💬' },
   { key: 'word', name: '词语', icon: '🔖' },
   { key: 'essay', name: '随笔', icon: '✍️' },
-  { key: 'article', name: '文章', icon: '📰' },
   { key: 'discussion', name: '讨论', icon: '🗣️' },
 ];
+
+const FIELD_CONFIGS = {
+  sentence: [{ id: 'content', label: '内容', type: 'textarea', required: true }, { id: 'author', label: '作者', type: 'text', optional: true }, { id: 'source', label: '来源', type: 'text', optional: true }],
+  word: [{ id: 'title', label: '词语', type: 'text', required: true }, { id: 'content', label: '释义', type: 'textarea', required: true }],
+  essay: [{ id: 'title', label: '标题', type: 'text', required: true }, { id: 'content', label: '内容', type: 'textarea', required: true }, { id: 'author', label: '作者', type: 'text', optional: true }],
+  discussion: [{ id: 'topic', label: '讨论主题', type: 'text', required: true }, { id: 'points', label: '论点', type: 'dynamic', required: true }]
+};
 
 // --- State ---
 let db = null;
 let currentCategory = 'sentence';
+let allItems = [];
+let darkMode = false;
+let currentFilterType = 'all'; // 'all' or a category key
 
 // --- DOM ---
-const views = {
-  list: document.getElementById('listView'),
-  form: document.getElementById('formView')
-};
+const views = { list: document.getElementById('listView'), form: document.getElementById('formView'), stats: document.getElementById('statsView'), more: document.getElementById('moreView') };
 const listEl = document.getElementById('list');
 const catGrid = document.getElementById('categoryGrid');
+const dynamicFields = document.getElementById('dynamicFields');
+const searchInput = document.getElementById('searchInput');
+const themeToggle = document.getElementById('themeToggle');
+const statsContainer = document.getElementById('statsContainer');
+const filterBar = document.getElementById('filterBar');
+const tagsInput = document.getElementById('tagsInput');
 
 // --- Init ---
 window.addEventListener('DOMContentLoaded', async () => {
   db = await initDB();
+  loadTheme();
   setupEventListeners();
   renderCategories();
-  renderList();
+  await refreshList();
 });
 
 async function initDB() {
   return new Promise((resolve, reject) => {
     const req = indexedDB.open(DB_NAME, 1);
-    req.onupgradeneeded = (e) => {
-      const db = e.target.result;
-      if (!db.objectStoreNames.contains(STORE_NAME)) {
-        db.createObjectStore(STORE_NAME, { keyPath: 'id' });
-      }
-    };
+    req.onupgradeneeded = (e) => { const db = e.target.result; if (!db.objectStoreNames.contains(STORE_NAME)) db.createObjectStore(STORE_NAME, { keyPath: 'id' }); };
     req.onsuccess = (e) => resolve(e.target.result);
     req.onerror = () => reject(req.error);
   });
@@ -316,126 +261,326 @@ async function initDB() {
 function setupEventListeners() {
   document.getElementById('fabAdd').onclick = showForm;
   document.getElementById('closeForm').onclick = hideForm;
-  document.getElementById('saveBtn').onclick = handleSave;
+  document.getElementById('exportBtn').onclick = exportData;
+  document.getElementById('importInput').onchange = importData;
+  document.getElementById('clearAllBtn').onclick = clearAllData;
+  themeToggle.onclick = toggleTheme;
 
-  // Bottom Nav
+  searchInput.oninput = () => renderList();
+
   document.querySelector('.nav-bar').onclick = (e) => {
     const btn = e.target.closest('.nav-btn');
     if (!btn) return;
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    // For now, only list view is functional
-    if (btn.dataset.view === 'list') {
-      views.list.classList.remove('hidden');
-      views.form.classList.add('hidden');
+    
+    Object.values(views).forEach(v => v.classList.add('hidden'));
+    const view = btn.dataset.view;
+    if (view === 'list') { 
+      views.list.classList.remove('hidden'); 
+      // 如果从分类页回来，不清空筛选，保持当前筛选状态
     }
+    if (view === 'stats') { views.stats.classList.remove('hidden'); renderStats(); }
+    if (view === 'more') views.more.classList.remove('hidden');
   };
 }
 
 function renderCategories() {
-  catGrid.innerHTML = CATEGORIES.map(cat => `
-    <div class="cat-btn ${cat.key === currentCategory ? 'selected' : ''}" data-key="${cat.key}">
-      <span class="icon">${cat.icon}</span>
-      <span class="name">${cat.name}</span>
-    </div>
-  `).join('');
-
+  catGrid.innerHTML = CATEGORIES.map(cat => `<div class="cat-btn ${cat.key === currentCategory ? 'selected' : ''}" data-key="${cat.key}"><span class="icon">${cat.icon}</span><span class="name">${cat.name}</span></div>`).join('');
   catGrid.onclick = (e) => {
     const btn = e.target.closest('.cat-btn');
     if (!btn) return;
     currentCategory = btn.dataset.key;
     document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('selected'));
     btn.classList.add('selected');
+    renderDynamicFields();
   };
 }
 
-// --- View Switching ---
-function showForm() {
-  views.list.classList.add('hidden');
-  views.form.classList.remove('hidden');
-  // Reset form
-  document.getElementById('titleInput').value = '';
-  document.getElementById('contentInput').value = '';
-  document.getElementById('authorInput').value = '';
-  document.getElementById('sourceInput').value = '';
-  currentCategory = 'sentence';
-  renderCategories();
+function renderDynamicFields() {
+  const config = FIELD_CONFIGS[currentCategory];
+  let html = '';
+  config.forEach(field => {
+    if (field.type === 'dynamic') {
+      // 修复：确保容器 ID 正确，并且按钮的 onclick 调用正确的函数
+      html += `<div class="field dynamic-field">
+                <label>${field.label}</label>
+                <div class="dynamic-inputs" id="${field.id}Inputs"></div>
+                <button type="button" class="add-dynamic-btn" onclick="addDynamicInput('${field.id}')">+ 添加论点</button>
+              </div>`;
+    } else {
+      html += `<div class="field"><label>${field.label} <span class="optional">${field.optional ? '(选填)' : ''}</span></label>${field.type === 'textarea' ? `<textarea id="${field.id}Input"></textarea>` : `<input type="${field.type}" id="${field.id}Input">`}</div>`;
+    }
+  });
+  dynamicFields.innerHTML = html;
+  if (currentCategory === 'discussion') {
+    // 初始化时添加一个空的论点输入框
+    addDynamicInput('points');
+  }
 }
 
-function hideForm() {
-  views.list.classList.remove('hidden');
-  views.form.classList.add('hidden');
+// 修复：确保 addDynamicInput 函数在全局作用域，并且能正确找到容器
+window.addDynamicInput = function(fieldId) {
+  const container = document.getElementById(`${fieldId}Inputs`);
+  if (!container) {
+    console.error(`Container with id "${fieldId}Inputs" not found.`);
+    return;
+  }
+  const count = container.children.length + 1;
+  const div = document.createElement('div');
+  div.className = 'dynamic-input-item';
+  div.innerHTML = `<textarea id="${fieldId}Input${count}" placeholder="论点 ${count}"></textarea><button type="button" class="remove-btn" onclick="this.parentElement.remove()">×</button>`;
+  container.appendChild(div);
 }
 
 // --- Data Handling ---
 async function handleSave() {
-  const title = document.getElementById('titleInput').value.trim();
-  const content = document.getElementById('contentInput').value.trim();
-  if (!title || !content) {
-    alert('标题和内容不能为空');
-    return;
+  const config = FIELD_CONFIGS[currentCategory];
+  const data = {};
+  let valid = true;
+
+  config.forEach(field => {
+    if (field.type !== 'dynamic') {
+      const el = document.getElementById(`${field.id}Input`);
+      const val = el.value.trim();
+      if (field.required && !val) { alert(`${field.label}不能为空`); valid = false; }
+      data[field.id] = val;
+    }
+  });
+
+  if (!valid) return;
+
+  if (currentCategory === 'discussion') {
+    const points = [];
+    document.querySelectorAll('#pointsInputs textarea').forEach(t => { if (t.value.trim()) points.push(t.value.trim()); });
+    if (points.length === 0) { alert('至少需要一个论点'); return; }
+    data.points = points;
   }
 
-  const record = {
-    id: Date.now().toString(),
-    type: currentCategory,
-    title: title,
-    content: content,
-    author: document.getElementById('authorInput').value.trim(),
-    source: document.getElementById('sourceInput').value.trim(),
-    createdAt: Date.now()
-  };
+  // 处理标签
+  const tags = tagsInput.value.split(',').map(t => t.trim()).filter(Boolean);
+  data.tags = tags;
 
+  const record = { id: Date.now().toString(), type: currentCategory, ...data, createdAt: Date.now() };
   await saveItem(record);
   hideForm();
+  await refreshList();
+}
+
+async function deleteItem(id) {
+  if (!confirm('确定要删除这条记录吗？')) return;
+  const tx = db.transaction(STORE_NAME, 'readwrite');
+  tx.objectStore(STORE_NAME).delete(id);
+  tx.oncomplete = () => refreshList();
+}
+
+async function refreshList() {
+  allItems = await getAllItems();
   renderList();
+  renderStats();
 }
 
 async function renderList() {
-  const items = await getAllItems();
+  const query = searchInput.value.toLowerCase().trim();
+  let items = allItems;
+  
+  // 分类筛选
+  if (currentFilterType !== 'all') {
+    items = items.filter(item => item.type === currentFilterType);
+  }
+  
+  // 搜索过滤
+  if (query) {
+    items = items.filter(item => 
+      (item.title && item.title.toLowerCase().includes(query)) ||
+      (item.content && item.content.toLowerCase().includes(query)) ||
+      (item.author && item.author.toLowerCase().includes(query)) ||
+      (item.topic && item.topic.toLowerCase().includes(query)) ||
+      (item.tags && item.tags.join(',').toLowerCase().includes(query))
+    );
+  }
+  
   items.sort((a, b) => b.createdAt - a.createdAt);
-
+  
+  // 更新筛选栏
+  updateFilterBar();
+  
   if (items.length === 0) {
-    listEl.innerHTML = `<div class="empty"><div class="big">📭</div>还没有记录，点击右下角添加</div>`;
+    listEl.innerHTML = `<div class="empty"><div class="big">📭</div>${query ? '没有找到匹配的记录' : '还没有记录'}</div>`;
     return;
   }
-
+  
   listEl.innerHTML = items.map(item => `
     <div class="card">
-      <div class="t">${item.title}</div>
-      <div class="c">${item.content}</div>
+      <div class="t">${item.title || item.topic || item.content?.substring(0, 30)}</div>
+      <div class="c">${item.content || (item.points ? item.points.length + ' 个论点' : '')}</div>
+      ${item.tags && item.tags.length ? `<div class="tags">${item.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</div>` : ''}
       <div class="meta">
-        ${getCatIcon(item.type)} ${CATEGORIES.find(c => c.key === item.type)?.name || item.type}
-        ${item.author ? `· ${item.author}` : ''}
+        <span>${CATEGORIES.find(c => c.key === item.type)?.icon} ${CATEGORIES.find(c => c.key === item.type)?.name} · ${timeAgo(item.createdAt)}</span>
+        <div class="actions"><button onclick="deleteItem('${item.id}')">删除</button></div>
       </div>
     </div>
   `).join('');
 }
 
-function getCatIcon(type) {
-  const cat = CATEGORIES.find(c => c.key === type);
-  return cat ? cat.icon : '📄';
+function updateFilterBar() {
+  if (currentFilterType === 'all') {
+    filterBar.style.display = 'none';
+    filterBar.innerHTML = '';
+  } else {
+    const cat = CATEGORIES.find(c => c.key === currentFilterType);
+    filterBar.style.display = 'flex';
+    filterBar.innerHTML = `
+      <div class="filter-tag">
+        ${cat.icon} ${cat.name}
+        <button onclick="clearFilter()">×</button>
+      </div>
+    `;
+  }
+}
+
+function clearFilter() {
+  currentFilterType = 'all';
+  renderList();
+}
+
+// --- Stats View ---
+function renderStats() {
+  const total = allItems.length;
+  const counts = {};
+  CATEGORIES.forEach(cat => counts[cat.key] = 0);
+  allItems.forEach(item => { if (counts[item.type] !== undefined) counts[item.type]++; });
+  
+  let html = `
+    <div class="stat-card total">
+      <div class="number">${total}</div>
+      <div class="label">总记录数</div>
+    </div>
+    <div class="stat-grid">
+  `;
+  
+  CATEGORIES.forEach(cat => {
+    const count = counts[cat.key];
+    const percentage = total > 0 ? (count / total * 100) : 0;
+    html += `
+      <div class="mini-stat" onclick="filterByCategory('${cat.key}')">
+        <div class="icon">${cat.icon}</div>
+        <div class="count">${count}</div>
+        <div class="name">${cat.name}</div>
+        <div class="progress-bar"><div class="fill" style="width: ${percentage}%"></div></div>
+      </div>
+    `;
+  });
+  
+  html += `</div>`;
+  statsContainer.innerHTML = html;
+}
+
+function filterByCategory(categoryKey) {
+  currentFilterType = categoryKey;
+  // 切换到列表页
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.nav-btn[data-view="list"]').classList.add('active');
+  Object.values(views).forEach(v => v.classList.add('hidden'));
+  views.list.classList.remove('hidden');
+  renderList();
+}
+
+// --- Theme ---
+function loadTheme() {
+  darkMode = localStorage.getItem('darkMode') === 'true';
+  applyTheme();
+}
+
+function toggleTheme() {
+  darkMode = !darkMode;
+  localStorage.setItem('darkMode', darkMode);
+  applyTheme();
+}
+
+function applyTheme() {
+  if (darkMode) {
+    document.body.classList.add('dark-mode');
+    themeToggle.textContent = '☀️';
+  } else {
+    document.body.classList.remove('dark-mode');
+    themeToggle.textContent = '🌙';
+  }
+}
+
+// --- Backup & Restore ---
+function exportData() {
+  getAllItems().then(items => {
+    const dataStr = JSON.stringify(items, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `zhainote_backup_${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+}
+
+function importData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const items = JSON.parse(e.target.result);
+      if (!Array.isArray(items)) throw new Error('格式错误');
+      if (confirm(`将导入 ${items.length} 条记录。是否覆盖现有数据？\n点击“取消”将合并数据。`)) {
+        clearAllData(false).then(() => saveBatch(items));
+      } else {
+        saveBatch(items);
+      }
+    } catch (err) {
+      alert('导入失败：文件格式不正确');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+function saveBatch(items) {
+  const tx = db.transaction(STORE_NAME, 'readwrite');
+  items.forEach(item => tx.objectStore(STORE_NAME).put(item));
+  tx.oncomplete = () => { alert('导入成功！'); refreshList(); };
+}
+
+function clearAllData(confirmFirst = true) {
+  if (confirmFirst && !confirm('确定要清空所有数据吗？此操作不可恢复！')) return;
+  const tx = db.transaction(STORE_NAME, 'readwrite');
+  tx.objectStore(STORE_NAME).clear();
+  tx.oncomplete = () => { if (confirmFirst) refreshList(); };
+}
+
+// --- Utils ---
+function timeAgo(timestamp) {
+  const seconds = Math.floor((Date.now() - timestamp) / 1000);
+  if (seconds < 60) return '刚刚';
+  const minutes = Math.floor(seconds / 60);
+  if (minutes < 60) return `${minutes}分钟前`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}小时前`;
+  const days = Math.floor(hours / 24);
+  return `${days}天前`;
 }
 
 // --- DB Helpers ---
-function saveItem(item) {
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readwrite');
-    tx.objectStore(STORE_NAME).put(item);
-    tx.oncomplete = resolve;
-    tx.onerror = () => reject(tx.error);
-  });
-}
+function saveItem(item) { return new Promise((res, rej) => { const tx = db.transaction(STORE_NAME, 'readwrite'); tx.objectStore(STORE_NAME).put(item); tx.oncomplete = res; tx.onerror = rej; }); }
+function getAllItems() { return new Promise((res, rej) => { const tx = db.transaction(STORE_NAME, 'readonly'); const req = tx.objectStore(STORE_NAME).getAll(); req.onsuccess = () => res(req.result || []); req.onerror = rej; }); }
 
-function getAllItems() {
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE_NAME, 'readonly');
-    const req = tx.objectStore(STORE_NAME).getAll();
-    req.onsuccess = () => resolve(req.result || []);
-    req.onerror = () => reject(req.error);
-  });
+// --- View Switch ---
+function showForm() { 
+  views.list.classList.add('hidden'); 
+  views.form.classList.remove('hidden'); 
+  renderDynamicFields(); 
+  // 清空标签输入框
+  tagsInput.value = '';
 }
+function hideForm() { views.list.classList.remove('hidden'); views.form.classList.add('hidden'); }
 </script>
-
 </body>
 </html>
