@@ -54,18 +54,18 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helve
 
 .list-content { padding: 20px; }
 
-/* Card - 移除删除按钮，添加点击效果 */
+/* Card */
 .card { background: var(--paper); padding: 20px; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 14px; position: relative; transition: var(--transition); cursor: pointer; }
 .card:active { transform: scale(0.98); }
-.card .t { font-size: 17px; font-weight: 600; margin-bottom: 8px; padding-right: 0; } /* 移除右侧padding */
+.card .t { font-size: 17px; font-weight: 600; margin-bottom: 8px; }
 .card .c { font-size: 14px; color: var(--ink2); line-height: 1.6; white-space: pre-wrap; overflow: hidden; }
 .card .meta { font-size: 12px; color: var(--ink2); margin-top: 12px; display: flex; justify-content: space-between; align-items: center; }
 .card .tags { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px; }
 .card .tag { background: var(--bg); color: var(--ink2); padding: 4px 10px; border-radius: 20px; font-size: 12px; border: 1px solid var(--line); }
 
-/* Detail View - 新增 */
+/* Detail View */
 .detail-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 20px 10px; background: var(--paper); position: sticky; top: 0; z-index: 10; border-bottom: 1px solid var(--line); transition: var(--transition); }
-.detail-header h2 { font-size: 20px; font-weight: 600; }
+.detail-header h2 { font-size: 20px; font-weight: 600; visibility: hidden; /* 隐藏标题文字 */ }
 .detail-header .back-btn { font-size: 16px; color: var(--primary); background: none; border: none; padding: 8px; }
 .detail-header .action-btns { display: flex; gap: 12px; }
 .detail-header .edit-btn { font-size: 16px; color: var(--primary); background: none; border: none; padding: 8px; }
@@ -79,8 +79,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helve
 .detail-section .point-item { padding: 16px; background: var(--bg); border-radius: 12px; border-left: 4px solid var(--primary); }
 .detail-section .point-number { font-size: 12px; color: var(--primary); font-weight: 600; margin-bottom: 8px; }
 .detail-section .point-content { font-size: 15px; line-height: 1.6; }
-.detail-section .meta-info { font-size: 13px; color: var(--ink2); display: flex; flex-wrap: wrap; gap: 12px; }
-.detail-section .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+
+/* 极简信息栏 (无框) */
+.detail-meta { padding: 0 20px 20px; }
+.meta-line { font-size: 13px; color: var(--ink2); display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 12px; }
+.meta-line span { display: flex; align-items: center; gap: 4px; }
+.meta-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
 
 /* Form View */
 .form-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 20px 10px; background: var(--paper); position: sticky; top: 0; z-index: 10; border-bottom: 1px solid var(--line); transition: var(--transition); }
@@ -95,12 +99,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helve
 .field textarea { min-height: 120px; resize: none; }
 .field .optional { color: var(--ink2); font-size: 12px; margin-left: 4px; }
 
-/* Category Selector */
-.category-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-.cat-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px 12px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--paper); cursor: pointer; transition: all 0.2s; }
+/* Category Selector - 改小 */
+.category-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.cat-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--paper); cursor: pointer; transition: all 0.2s; }
 .cat-btn.selected { border-color: var(--primary); background: #f0f7ff; }
-.cat-btn .icon { font-size: 32px; margin-bottom: 8px; }
-.cat-btn .name { font-size: 14px; font-weight: 600; }
+.cat-btn .icon { font-size: 24px; margin-bottom: 4px; }
+.cat-btn .name { font-size: 13px; font-weight: 600; }
 
 /* Dynamic Points (Discussion) */
 .dynamic-field .add-dynamic-btn { margin-top: 12px; padding: 10px 16px; background: var(--bg); border: 1px dashed var(--line); border-radius: 10px; color: var(--primary); font-weight: 600; width: 100%; }
@@ -109,7 +113,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helve
 .dynamic-input-item textarea { flex: 1; min-height: 80px; }
 .dynamic-input-item .remove-btn { background: #ff3b30; color: white; border: none; border-radius: 8px; width: 36px; height: 36px; font-size: 20px; cursor: pointer; flex-shrink: 0; margin-top: 8px; }
 
-/* Stats View (Category Tab) */
+/* Stats View */
 .stats-container { padding: 20px; }
 .stat-card { background: var(--paper); padding: 24px; border-radius: var(--radius); margin-bottom: 16px; box-shadow: var(--shadow); transition: var(--transition); }
 .stat-card.total { text-align: center; }
@@ -159,25 +163,25 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helve
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21.53 20.47l-3.66-3.66C18.195 15.91 18.345 15.595 18.345 15.595c1.215-1.215 1.965-2.895 1.965-4.745 0-3.86-3.14-7-7-7s-7 3.14-7 7 3.14 7 7 7c1.85 0 3.535-.75 4.745-1.965 0 0 .315.15.595.345l3.66 3.66c.735.735 1.93.735 2.665 0 .735-.735.735-1.93 0-2.665zm-6.53-4.47c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
         <input type="text" id="searchInput" placeholder="搜索标题、内容、作者或标签...">
       </div>
-      <div class="filter-bar" id="filterBar" style="display: none;">
-        <!-- 动态显示当前筛选的分类 -->
-      </div>
+      <div class="filter-bar" id="filterBar" style="display: none;"></div>
     </div>
     <div class="list-content" id="list"></div>
     <button class="fab" id="fabAdd">＋</button>
   </div>
 
-  <!-- Detail View - 新增 -->
+  <!-- Detail View -->
   <div class="view hidden" id="detailView">
     <div class="detail-header">
       <button class="back-btn" id="backToList">‹ 返回</button>
-      <h2 id="detailTitle">详情</h2>
+      <h2>详情</h2> <!-- 隐藏文字 -->
       <div class="action-btns">
         <button class="edit-btn" id="editDetail">编辑</button>
         <button class="delete-btn" id="deleteDetail">删除</button>
       </div>
     </div>
     <div class="detail-content" id="detailContent"></div>
+    <!-- 极简信息栏 -->
+    <div class="detail-meta" id="detailMeta"></div>
   </div>
 
   <!-- Form View -->
@@ -201,7 +205,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helve
     <button class="save-btn" id="saveBtn">保存</button>
   </div>
 
-  <!-- Stats View (Category Tab) -->
+  <!-- Stats View -->
   <div class="view hidden" id="statsView">
     <div class="list-header">
       <h1>数据统计</h1>
@@ -245,11 +249,10 @@ const CATEGORIES = [
   { key: 'discussion', name: '讨论', icon: '🗣️' },
 ];
 
-// 修改点：移除了随笔的标题字段
 const FIELD_CONFIGS = {
   sentence: [{ id: 'content', label: '内容', type: 'textarea', required: true }, { id: 'author', label: '作者', type: 'text', optional: true }, { id: 'source', label: '来源', type: 'text', optional: true }],
   word: [{ id: 'title', label: '词语', type: 'text', required: true }, { id: 'content', label: '释义', type: 'textarea', required: true }],
-  essay: [{ id: 'content', label: '内容', type: 'textarea', required: true }, { id: 'author', label: '作者', type: 'text', optional: true }], // 只有内容和作者
+  essay: [{ id: 'content', label: '内容', type: 'textarea', required: true }, { id: 'author', label: '作者', type: 'text', optional: true }],
   discussion: [{ id: 'topic', label: '讨论主题', type: 'text', required: true }, { id: 'points', label: '论点', type: 'dynamic', required: true }]
 };
 
@@ -258,17 +261,11 @@ let db = null;
 let currentCategory = 'sentence';
 let allItems = [];
 let darkMode = false;
-let currentFilterType = 'all'; // 'all' or a category key
-let currentItemId = null; // 当前查看/编辑的项目ID
+let currentFilterType = 'all';
+let currentItemId = null;
 
 // --- DOM ---
-const views = { 
-  list: document.getElementById('listView'), 
-  detail: document.getElementById('detailView'),
-  form: document.getElementById('formView'), 
-  stats: document.getElementById('statsView'), 
-  more: document.getElementById('moreView') 
-};
+const views = { list: document.getElementById('listView'), detail: document.getElementById('detailView'), form: document.getElementById('formView'), stats: document.getElementById('statsView'), more: document.getElementById('moreView') };
 const listEl = document.getElementById('list');
 const catGrid = document.getElementById('categoryGrid');
 const dynamicFields = document.getElementById('dynamicFields');
@@ -278,7 +275,7 @@ const statsContainer = document.getElementById('statsContainer');
 const filterBar = document.getElementById('filterBar');
 const tagsInput = document.getElementById('tagsInput');
 const detailContent = document.getElementById('detailContent');
-const detailTitle = document.getElementById('detailTitle');
+const detailMeta = document.getElementById('detailMeta');
 const backToList = document.getElementById('backToList');
 const editDetail = document.getElementById('editDetail');
 const deleteDetail = document.getElementById('deleteDetail');
@@ -325,9 +322,7 @@ function setupEventListeners() {
     
     Object.values(views).forEach(v => v.classList.add('hidden'));
     const view = btn.dataset.view;
-    if (view === 'list') { 
-      views.list.classList.remove('hidden'); 
-    }
+    if (view === 'list') views.list.classList.remove('hidden');
     if (view === 'stats') { views.stats.classList.remove('hidden'); renderStats(); }
     if (view === 'more') views.more.classList.remove('hidden');
   };
@@ -360,12 +355,9 @@ function renderDynamicFields() {
     }
   });
   dynamicFields.innerHTML = html;
-  if (currentCategory === 'discussion') {
-    addDynamicInput('points');
-  }
+  if (currentCategory === 'discussion') addDynamicInput('points');
 }
 
-// 修复点：确保 addDynamicInput 函数在全局作用域
 window.addDynamicInput = function(fieldId) {
   const container = document.getElementById(`${fieldId}Inputs`);
   if (!container) return;
@@ -382,21 +374,14 @@ async function handleSave() {
   const data = {};
   let valid = true;
 
-  // 修复点：安全地获取表单值
   config.forEach(field => {
     if (field.type !== 'dynamic') {
       const el = document.getElementById(`${field.id}Input`);
       if (el) {
         const val = el.value.trim();
-        if (field.required && !val) {
-          alert(`${field.label}不能为空`);
-          valid = false;
-        }
+        if (field.required && !val) { alert(`${field.label}不能为空`); valid = false; }
         data[field.id] = val;
-      } else {
-        // 如果元素不存在（比如随笔没有标题字段），则设置为空字符串
-        data[field.id] = '';
-      }
+      } else { data[field.id] = ''; }
     }
   });
 
@@ -409,13 +394,11 @@ async function handleSave() {
     data.points = points;
   }
 
-  // 处理标签
   const tags = tagsInput.value.split(',').map(t => t.trim()).filter(Boolean);
   data.tags = tags;
 
   const record = { id: currentItemId || Date.now().toString(), type: currentCategory, ...data, createdAt: Date.now() };
   
-  // 修复点：确保保存操作完成后再刷新列表
   try {
     await saveItem(record);
     hideForm();
@@ -441,36 +424,17 @@ async function refreshList() {
 }
 
 // --- 内容截断函数 ---
-function truncateText(text, maxLength = 100) {
-  if (!text) return '';
-  if (text.length <= maxLength) return text;
-  return text.substring(0, maxLength) + '...';
-}
-
-function getFirstLine(text) {
-  if (!text) return '';
-  const lines = text.split('\n');
-  return lines[0] || '';
-}
-
-function truncateDefinition(text, maxSentences = 2) {
-  if (!text) return '';
-  const sentences = text.split(/[。！？!?]/);
-  if (sentences.length <= maxSentences) return text;
-  return sentences.slice(0, maxSentences).join('。') + '。';
-}
+function truncateText(text, maxLength = 100) { if (!text) return ''; return text.length <= maxLength ? text : text.substring(0, maxLength) + '...'; }
+function getFirstLine(text) { if (!text) return ''; const lines = text.split('\n'); return lines[0] || ''; }
+function truncateDefinition(text, maxSentences = 2) { if (!text) return ''; const sentences = text.split(/[。！？!?]/); return sentences.length <= maxSentences ? text : sentences.slice(0, maxSentences).join('。') + '。'; }
 
 // --- 列表渲染（摘要模式）---
 async function renderList() {
   const query = searchInput.value.toLowerCase().trim();
   let items = allItems;
   
-  // 分类筛选
-  if (currentFilterType !== 'all') {
-    items = items.filter(item => item.type === currentFilterType);
-  }
+  if (currentFilterType !== 'all') items = items.filter(item => item.type === currentFilterType);
   
-  // 搜索过滤
   if (query) {
     items = items.filter(item => 
       (item.title && item.title.toLowerCase().includes(query)) ||
@@ -482,8 +446,6 @@ async function renderList() {
   }
   
   items.sort((a, b) => b.createdAt - a.createdAt);
-  
-  // 更新筛选栏
   updateFilterBar();
   
   if (items.length === 0) {
@@ -496,22 +458,10 @@ async function renderList() {
     let title = '';
     
     switch(item.type) {
-      case 'discussion':
-        title = item.topic || '未命名讨论';
-        summary = `${item.points ? item.points.length : 0}个论点`;
-        break;
-      case 'word':
-        title = item.title || '未命名词语';
-        summary = truncateDefinition(item.content || '', 2);
-        break;
-      case 'sentence':
-        title = '句子';
-        summary = truncateText(item.content || '', 80);
-        break;
-      case 'essay':
-        title = '随笔';
-        summary = getFirstLine(item.content || '');
-        break;
+      case 'discussion': title = item.topic || '未命名讨论'; summary = `${item.points ? item.points.length : 0}个论点`; break;
+      case 'word': title = item.title || '未命名词语'; summary = truncateDefinition(item.content || '', 2); break;
+      case 'sentence': title = '句子'; summary = truncateText(item.content || '', 80); break;
+      case 'essay': title = '随笔'; summary = getFirstLine(item.content || ''); break;
     }
     
     return `
@@ -528,25 +478,15 @@ async function renderList() {
 }
 
 function updateFilterBar() {
-  if (currentFilterType === 'all') {
-    filterBar.style.display = 'none';
-    filterBar.innerHTML = '';
-  } else {
+  if (currentFilterType === 'all') { filterBar.style.display = 'none'; filterBar.innerHTML = ''; }
+  else {
     const cat = CATEGORIES.find(c => c.key === currentFilterType);
     filterBar.style.display = 'flex';
-    filterBar.innerHTML = `
-      <div class="filter-tag">
-        ${cat.icon} ${cat.name}
-        <button onclick="clearFilter()">×</button>
-      </div>
-    `;
+    filterBar.innerHTML = `<div class="filter-tag">${cat.icon} ${cat.name}<button onclick="clearFilter()">×</button></div>`;
   }
 }
 
-function clearFilter() {
-  currentFilterType = 'all';
-  renderList();
-}
+function clearFilter() { currentFilterType = 'all'; renderList(); }
 
 // --- 详情页功能 ---
 function showDetail(id) {
@@ -554,92 +494,43 @@ function showDetail(id) {
   const item = allItems.find(i => i.id === id);
   if (!item) return;
   
-  // 设置详情页标题
-  detailTitle.textContent = CATEGORIES.find(c => c.key === item.type)?.name || '详情';
-  
   // 渲染详情内容
   let html = '';
-  
   switch(item.type) {
     case 'discussion':
-      html = `
-        <div class="detail-section">
-          <h3>讨论主题</h3>
-          <div class="content">${item.topic || ''}</div>
-        </div>
-        <div class="detail-section">
-          <h3>论点 (${item.points ? item.points.length : 0})</h3>
-          <div class="points-list">
-            ${item.points ? item.points.map((point, index) => `
-              <div class="point-item">
-                <div class="point-number">论点 ${index + 1}</div>
-                <div class="point-content">${point}</div>
-              </div>
-            `).join('') : '<div class="content">暂无论点</div>'}
-          </div>
-        </div>
-      `;
+      html = `<div class="detail-section"><h3>讨论主题</h3><div class="content">${item.topic || ''}</div></div>
+              <div class="detail-section"><h3>论点 (${item.points ? item.points.length : 0})</h3>
+                <div class="points-list">${item.points ? item.points.map((point, index) => `
+                  <div class="point-item"><div class="point-number">论点 ${index + 1}</div><div class="point-content">${point}</div></div>
+                `).join('') : '<div class="content">暂无论点</div>'}</div></div>`;
       break;
-      
     case 'word':
-      html = `
-        <div class="detail-section">
-          <h3>词语</h3>
-          <div class="content">${item.title || ''}</div>
-        </div>
-        <div class="detail-section">
-          <h3>释义</h3>
-          <div class="content">${item.content || ''}</div>
-        </div>
-      `;
+      html = `<div class="detail-section"><h3>词语</h3><div class="content">${item.title || ''}</div></div>
+              <div class="detail-section"><h3>释义</h3><div class="content">${item.content || ''}</div></div>`;
       break;
-      
     case 'sentence':
-      html = `
-        <div class="detail-section">
-          <h3>句子</h3>
-          <div class="content">${item.content || ''}</div>
-        </div>
-        ${item.author ? `<div class="detail-section">
-          <h3>作者</h3>
-          <div class="content">${item.author}</div>
-        </div>` : ''}
-        ${item.source ? `<div class="detail-section">
-          <h3>来源</h3>
-          <div class="content">${item.source}</div>
-        </div>` : ''}
-      `;
+      html = `<div class="detail-section"><h3>句子</h3><div class="content">${item.content || ''}</div></div>
+              ${item.author ? `<div class="detail-section"><h3>作者</h3><div class="content">${item.author}</div></div>` : ''}
+              ${item.source ? `<div class="detail-section"><h3>来源</h3><div class="content">${item.source}</div></div>` : ''}`;
       break;
-      
     case 'essay':
-      html = `
-        <div class="detail-section">
-          <h3>随笔</h3>
-          <div class="content">${item.content || ''}</div>
-        </div>
-        ${item.author ? `<div class="detail-section">
-          <h3>作者</h3>
-          <div class="content">${item.author}</div>
-        </div>` : ''}
-      `;
+      html = `<div class="detail-section"><h3>随笔</h3><div class="content">${item.content || ''}</div></div>
+              ${item.author ? `<div class="detail-section"><h3>作者</h3><div class="content">${item.author}</div></div>` : ''}`;
       break;
   }
-  
-  // 添加元信息和标签
-  html += `
-    <div class="detail-section">
-      <h3>信息</h3>
-      <div class="meta-info">
-        <span>📅 ${new Date(item.createdAt).toLocaleDateString()}</span>
-        <span>${CATEGORIES.find(c => c.key === item.type)?.icon} ${CATEGORIES.find(c => c.key === item.type)?.name}</span>
-      </div>
-      ${item.tags && item.tags.length ? `<div class="tags">${item.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</div>` : ''}
-    </div>
-  `;
-  
   detailContent.innerHTML = html;
   
-  // 切换到详情页
+  // 渲染极简信息栏
+  const dateStr = new Date(item.createdAt).toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
+  detailMeta.innerHTML = `
+    <div class="meta-line">
+      <span>📅 ${dateStr}</span>
+      <span>${CATEGORIES.find(c => c.key === item.type)?.icon} ${CATEGORIES.find(c => c.key === item.type)?.name}</span>
+    </div>
+    ${item.tags && item.tags.length ? `<div class="meta-tags">${item.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</div>` : ''}
+  `;
+  
+  // 切换视图
   Object.values(views).forEach(v => v.classList.add('hidden'));
   views.detail.classList.remove('hidden');
 }
@@ -657,35 +548,23 @@ function editCurrentItem() {
   currentCategory = item.type;
   currentItemId = item.id;
   
-  // 切换到表单页
   Object.values(views).forEach(v => v.classList.add('hidden'));
   views.form.classList.remove('hidden');
-  
-  // 更新表单标题
   formTitle.textContent = '编辑记录';
   
-  // 渲染分类选择器并选中当前分类
   renderCategories();
-  document.querySelectorAll('.cat-btn').forEach(btn => {
-    btn.classList.toggle('selected', btn.dataset.key === currentCategory);
-  });
-  
-  // 渲染动态字段
+  document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.toggle('selected', btn.dataset.key === currentCategory));
   renderDynamicFields();
   
-  // 填充表单数据
   setTimeout(() => {
     const config = FIELD_CONFIGS[currentCategory];
     config.forEach(field => {
       if (field.type !== 'dynamic') {
         const el = document.getElementById(`${field.id}Input`);
-        if (el && item[field.id]) {
-          el.value = item[field.id];
-        }
+        if (el && item[field.id]) el.value = item[field.id];
       }
     });
     
-    // 处理讨论的论点
     if (currentCategory === 'discussion' && item.points) {
       const container = document.getElementById('pointsInputs');
       container.innerHTML = '';
@@ -697,10 +576,7 @@ function editCurrentItem() {
       });
     }
     
-    // 填充标签
-    if (item.tags && item.tags.length) {
-      tagsInput.value = item.tags.join(', ');
-    }
+    if (item.tags && item.tags.length) tagsInput.value = item.tags.join(', ');
   }, 100);
 }
 
@@ -717,25 +593,12 @@ function renderStats() {
   CATEGORIES.forEach(cat => counts[cat.key] = 0);
   allItems.forEach(item => { if (counts[item.type] !== undefined) counts[item.type]++; });
   
-  let html = `
-    <div class="stat-card total">
-      <div class="number">${total}</div>
-      <div class="label">总记录数</div>
-    </div>
-    <div class="stat-grid">
-  `;
+  let html = `<div class="stat-card total"><div class="number">${total}</div><div class="label">总记录数</div></div><div class="stat-grid">`;
   
   CATEGORIES.forEach(cat => {
     const count = counts[cat.key];
     const percentage = total > 0 ? (count / total * 100) : 0;
-    html += `
-      <div class="mini-stat" onclick="filterByCategory('${cat.key}')">
-        <div class="icon">${cat.icon}</div>
-        <div class="count">${count}</div>
-        <div class="name">${cat.name}</div>
-        <div class="progress-bar"><div class="fill" style="width: ${percentage}%"></div></div>
-      </div>
-    `;
+    html += `<div class="mini-stat" onclick="filterByCategory('${cat.key}')"><div class="icon">${cat.icon}</div><div class="count">${count}</div><div class="name">${cat.name}</div><div class="progress-bar"><div class="fill" style="width: ${percentage}%"></div></div></div>`;
   });
   
   html += `</div>`;
@@ -744,7 +607,6 @@ function renderStats() {
 
 function filterByCategory(categoryKey) {
   currentFilterType = categoryKey;
-  // 切换到列表页
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.querySelector('.nav-btn[data-view="list"]').classList.add('active');
   Object.values(views).forEach(v => v.classList.add('hidden'));
@@ -753,26 +615,9 @@ function filterByCategory(categoryKey) {
 }
 
 // --- Theme ---
-function loadTheme() {
-  darkMode = localStorage.getItem('darkMode') === 'true';
-  applyTheme();
-}
-
-function toggleTheme() {
-  darkMode = !darkMode;
-  localStorage.setItem('darkMode', darkMode);
-  applyTheme();
-}
-
-function applyTheme() {
-  if (darkMode) {
-    document.body.classList.add('dark-mode');
-    themeToggle.textContent = '☀️';
-  } else {
-    document.body.classList.remove('dark-mode');
-    themeToggle.textContent = '🌙';
-  }
-}
+function loadTheme() { darkMode = localStorage.getItem('darkMode') === 'true'; applyTheme(); }
+function toggleTheme() { darkMode = !darkMode; localStorage.setItem('darkMode', darkMode); applyTheme(); }
+function applyTheme() { if (darkMode) { document.body.classList.add('dark-mode'); themeToggle.textContent = '☀️'; } else { document.body.classList.remove('dark-mode'); themeToggle.textContent = '🌙'; } }
 
 // --- Backup & Restore ---
 function exportData() {
@@ -798,29 +643,15 @@ function importData(event) {
       if (!Array.isArray(items)) throw new Error('格式错误');
       if (confirm(`将导入 ${items.length} 条记录。是否覆盖现有数据？\n点击“取消”将合并数据。`)) {
         clearAllData(false).then(() => saveBatch(items));
-      } else {
-        saveBatch(items);
-      }
-    } catch (err) {
-      alert('导入失败：文件格式不正确');
-    }
+      } else { saveBatch(items); }
+    } catch (err) { alert('导入失败：文件格式不正确'); }
   };
   reader.readAsText(file);
   event.target.value = '';
 }
 
-function saveBatch(items) {
-  const tx = db.transaction(STORE_NAME, 'readwrite');
-  items.forEach(item => tx.objectStore(STORE_NAME).put(item));
-  tx.oncomplete = () => { alert('导入成功！'); refreshList(); };
-}
-
-function clearAllData(confirmFirst = true) {
-  if (confirmFirst && !confirm('确定要清空所有数据吗？此操作不可恢复！')) return;
-  const tx = db.transaction(STORE_NAME, 'readwrite');
-  tx.objectStore(STORE_NAME).clear();
-  tx.oncomplete = () => { if (confirmFirst) refreshList(); };
-}
+function saveBatch(items) { const tx = db.transaction(STORE_NAME, 'readwrite'); items.forEach(item => tx.objectStore(STORE_NAME).put(item)); tx.oncomplete = () => { alert('导入成功！'); refreshList(); }; }
+function clearAllData(confirmFirst = true) { if (confirmFirst && !confirm('确定要清空所有数据吗？此操作不可恢复！')) return; const tx = db.transaction(STORE_NAME, 'readwrite'); tx.objectStore(STORE_NAME).clear(); tx.oncomplete = () => { if (confirmFirst) refreshList(); }; }
 
 // --- Utils ---
 function timeAgo(timestamp) {
@@ -835,33 +666,11 @@ function timeAgo(timestamp) {
 }
 
 // --- DB Helpers ---
-function saveItem(item) { 
-  return new Promise((resolve, reject) => { 
-    const tx = db.transaction(STORE_NAME, 'readwrite'); 
-    const req = tx.objectStore(STORE_NAME).put(item);
-    req.onsuccess = () => resolve();
-    req.onerror = () => reject(req.error);
-  }); 
-}
-
-function getAllItems() { 
-  return new Promise((resolve, reject) => { 
-    const tx = db.transaction(STORE_NAME, 'readonly'); 
-    const req = tx.objectStore(STORE_NAME).getAll(); 
-    req.onsuccess = () => resolve(req.result || []); 
-    req.onerror = () => reject(req.error);
-  }); 
-}
+function saveItem(item) { return new Promise((resolve, reject) => { const tx = db.transaction(STORE_NAME, 'readwrite'); const req = tx.objectStore(STORE_NAME).put(item); req.onsuccess = () => resolve(); req.onerror = () => reject(req.error); }); }
+function getAllItems() { return new Promise((resolve, reject) => { const tx = db.transaction(STORE_NAME, 'readonly'); const req = tx.objectStore(STORE_NAME).getAll(); req.onsuccess = () => resolve(req.result || []); req.onerror = () => reject(req.error); }); }
 
 // --- View Switch ---
-function showForm() { 
-  currentItemId = null;
-  formTitle.textContent = '新记录';
-  views.list.classList.add('hidden'); 
-  views.form.classList.remove('hidden'); 
-  renderDynamicFields(); 
-  tagsInput.value = '';
-}
+function showForm() { currentItemId = null; formTitle.textContent = '新记录'; views.list.classList.add('hidden'); views.form.classList.remove('hidden'); renderDynamicFields(); tagsInput.value = ''; }
 function hideForm() { views.list.classList.remove('hidden'); views.form.classList.add('hidden'); }
 </script>
 </body>
